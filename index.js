@@ -1,7 +1,7 @@
 var pg = require('pg');
 var SphericalMercator = require('sphericalmercator');
 var merc = new SphericalMercator({
-    size: 256
+	size: 256
 });
 
 module.exports = function(options) {
@@ -42,8 +42,6 @@ module.exports = function(options) {
 		var bboxSQL = '\'BOX2D(' + bbox[0] + ' ' + bbox[1] + ',' + bbox[2] + ' ' + bbox[3] + ' )\'';
 		var sql = options.sql(server, tile);
 
-		var geom = 'SELECT {geojson} FROM tablename  '
-		var sql = 'SELECT ST_AsGeoJSON(ST_Simplify(geom, k)), fields FROM tablename WHERE '
 		if (!sql) {
 			err = new Error('Tile not found');
 			err.statusCode = 404;
@@ -63,9 +61,9 @@ module.exports = function(options) {
 			}
 
 			var outputText = '{"type": "FeatureCollection", "features": [' +
-					result.rows.map(function(row) {
+				result.rows.map(function(row) {
 					if (row.geojson) {
-						var featureString = '{"type": "Feature", "geometry": ' + row.geometry;
+						var featureString = '{"type": "Feature", "geometry": ' + row.geojson;
 						delete row.geojson;
 						return featureString + ', "properties": "' + JSON.stringify(row) + '"}';
 					}
@@ -78,7 +76,7 @@ module.exports = function(options) {
 
 	return {
 		name: 'postgis-geojson-tiles',
-    init: initialize,
+		init: initialize,
 		serve: serve
 	};
 };
