@@ -1,6 +1,6 @@
 var pg = require('pg');
 var SphericalMercator = require('sphericalmercator');
-var merc = new SphericalMercator({
+var sm = new SphericalMercator({
 	size: 256
 });
 
@@ -49,9 +49,9 @@ module.exports = function(options) {
 		bbox[2] += bufferX;
 		bbox[3] += bufferY;
 
-		var simplifyTolerance = simplifyFactor / (1 << z);
+		var simplifyTolerance = simplifyFactor / (1 << tile.z);
 		var geojsonSQL = 'ST_AsGeoJSON(ST_Intersection(ST_Simplify(' + geomField + ', ' + simplifyTolerance + '), {bbox})) AS geojson';
-		var bboxSQL = '\'BOX(' + bbox[0] + ' ' + bbox[1] + ',' + bbox[2] + ' ' + bbox[3] + ' )\'::box2d';
+		var bboxSQL = 'ST_SetSRID(\'BOX(' + bbox[0] + ' ' + bbox[1] + ',' + bbox[2] + ' ' + bbox[3] + ' )\'::box2d, 4326)';
 		var sql = options.sql(server, tile);
 
 		if (!sql) {
@@ -66,7 +66,7 @@ module.exports = function(options) {
 
 		pgPool.query(sql, function(err, result) {
 			if (err) {
-				console.log(query, err.message, err.stack)
+				console.log(sql, err.message, err.stack)
 				var err = new Error('An error occurred');
 				err.statusCode = 500;
 				return callback(err);
