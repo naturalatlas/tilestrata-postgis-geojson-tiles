@@ -1,0 +1,25 @@
+{
+  "name": "tilestrata-postgis-geojson-tiles",
+  "version": "0.0.1",
+  "description": "Tilestrata plugin for generating geojson tiles from postgis",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tilestrata",
+    "postgis",
+    "tiles",
+    "geojson"
+  ],
+  "author": "Brandon Reavis",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@mapbox/sphericalmercator": "^1.0.5",
+    "pg": "^6.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/naturalatlas/tilestrata-postgis-geojson-tiles.git"
+  }
+}
