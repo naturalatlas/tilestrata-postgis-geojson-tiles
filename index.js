@@ -8,7 +8,8 @@ module.exports = function(options) {
 
 	var pgPool;
 	var geomField = options.geometryField || 'geom';
-	var simplifyFactor = options.simplifyFactor || 0.75;
+	var simplifyFactor = typeof options.simplifyFactor === 'number' ? options.simplifyFactor : 0.75;
+	var buffer = typeof options.buffer === 'number' ? options.buffer : 16;
 
 	/**
 	 * Initializes the layer config and the PostgreSQL datasource.
@@ -37,9 +38,20 @@ module.exports = function(options) {
 	 */
 	function serve(server, tile, callback) {
 		var bbox = sm.bbox(tile.x, tile.y, tile.z);
+
+		// expand bbox by buffer
+		var w = bbox[2] - bbox[0];
+		var h = bbox[3] - bbox[1];
+		var bufferX = buffer * w / 256;
+		var bufferY = buffer * h / 256;
+		bbox[0] -= bufferX;
+		bbox[1] -= bufferY;
+		bbox[2] += bufferX;
+		bbox[3] += bufferY;
+
 		var simplifyTolerance = simplifyFactor / (1 << z);
-		var geojsonSQL = 'ST_AsGeoJSON(ST_Simplify(' + geomField + ', ' + simplifyTolerance + ')) AS geojson';
-		var bboxSQL = '\'BOX2D(' + bbox[0] + ' ' + bbox[1] + ',' + bbox[2] + ' ' + bbox[3] + ' )\'';
+		var geojsonSQL = 'ST_AsGeoJSON(ST_Intersection(ST_Simplify(' + geomField + ', ' + simplifyTolerance + '), {bbox})) AS geojson';
+		var bboxSQL = '\'BOX(' + bbox[0] + ' ' + bbox[1] + ',' + bbox[2] + ' ' + bbox[3] + ' )\'::box2d';
 		var sql = options.sql(server, tile);
 
 		if (!sql) {
