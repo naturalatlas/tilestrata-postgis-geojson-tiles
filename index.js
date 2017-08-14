@@ -50,7 +50,10 @@ module.exports = function(options) {
 		bbox[3] += bufferY;
 
 		var simplifyTolerance = simplifyFactor / (1 << tile.z);
-		var geojsonSQL = 'ST_AsGeoJSON(ST_Intersection(ST_MakeValid(ST_SimplifyPreserveTopology(' + geomField + ', ' + simplifyTolerance + ')), {bbox})) AS geojson';
+		var geojsonSQL = 'ST_Intersection(ST_MakeValid(ST_SimplifyPreserveTopology(' + geomField + ', ' + simplifyTolerance + ')), {bbox})';
+		if (options.dumpGeometry) geojsonSQL = '(ST_Dump(' + geojsonSQL + ')).geom';
+		geojsonSQL = 'ST_AsGeoJSON(' + geojsonSQL + ') AS geojson';
+
 		var bboxSQL = 'ST_SetSRID(\'BOX(' + bbox[0] + ' ' + bbox[1] + ',' + bbox[2] + ' ' + bbox[3] + ' )\'::box2d, 4326)';
 		var sql = options.sql(server, tile);
 
