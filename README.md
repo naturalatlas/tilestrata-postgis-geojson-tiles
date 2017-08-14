@@ -15,6 +15,7 @@ Tilestrata plugin for generating geojson tiles from postgis.
   - `{database}` (string)
 - `simplifyFactor` *(number, optional)*: a constant affecting how much the geometry is simplified. (default = `0.75`)
 - `buffer` *(number, optional)*: the amount of buffer around each tile in pixels. (default = `16`)
+- `dumpGeometry` *(boolean, optional)*: whether or not to use ST_Dump to break apart geometry collections. (default = `false`)
 
 ### Example
 ```js
