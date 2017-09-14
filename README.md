@@ -5,7 +5,7 @@ Tilestrata plugin for generating geojson tiles from postgis.
 
 - `geometryField` *(string, required)*: name of column containing geometry. (default = `"geom"`)
 - `sql` *(function, required)*: method that returns a PostGIS query that will be executed. *Be sure to protect against sql injection if doing dynamic filtering based on the request query string.* The query can contain the following tokens:
-  - `{bbox}` (box2d): the buffered tile bounding box 
+  - `{bbox}` (box2d): the buffered tile bounding box
   - `{geojson}` (text): the geojson representation of the clipped and simplified geometry as text
 - `pgConfig` *(object, required)*: postgres connection options
   - `{host}` (string)
@@ -15,6 +15,8 @@ Tilestrata plugin for generating geojson tiles from postgis.
   - `{database}` (string)
 - `simplifyFactor` *(number, optional)*: a constant affecting how much the geometry is simplified. (default = `0.75`)
 - `buffer` *(number, optional)*: the amount of buffer around each tile in pixels. (default = `16`)
+- `collectGeometry` *(boolean, optional)*: bundle all geometries together into a single geometry with ST_Collect before converting to GeoJSON. (default = `false`)
+- `mergeMultiLineStrings` *(boolean, optional)*: whether to try merging MultiLineStrings with ST_LineMerge before converting to GeoJSON. (default = `false`)
 - `dumpGeometry` *(boolean, optional)*: whether or not to use ST_Dump to break apart geometry collections. (default = `false`)
 
 ### Example
