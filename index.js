@@ -71,10 +71,6 @@ module.exports = function(options) {
 			.replace(/{geojson}/g, geojsonSQL)
 			.replace(/{bbox}/g, bboxSQL);
 
-		if (tile.x === 1563 && tile.y === 3149) {
-			console.log(sql);
-		}
-
 		pgPool.query(sql, function(err, result) {
 			if (err) {
 				console.log(sql, err.message, err.stack)
