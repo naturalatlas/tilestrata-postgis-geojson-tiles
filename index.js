@@ -1,11 +1,8 @@
 var pg = require('pg');
-var SphericalMercator = require('sphericalmercator');
-var sm = new SphericalMercator({
-	size: 256
-});
+var SphericalMercator = require('@mapbox/sphericalmercator');
+var sm = new SphericalMercator({ size: 256 });
 
 module.exports = function(options) {
-
 	var pgPool;
 	var geomField = options.geometryField || 'geom';
 	var simplifyFactor = typeof options.simplifyFactor === 'number' ? options.simplifyFactor : 0.75;
@@ -21,7 +18,7 @@ module.exports = function(options) {
 	function initialize(server, callback) {
 		pgPool = new pg.Pool(options.pgConfig);
 		pgPool.on('error', function (err, client) {
-		  console.error(err.message, err.stack);
+			console.error(err.message, err.stack);
 		});
 
 		callback();
