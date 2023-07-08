@@ -68,7 +68,7 @@ module.exports = function(options) {
 			.replace(/{geojson}/g, geojsonSQL)
 			.replace(/{bbox}/g, bboxSQL);
 
-		pgPool.query(sql).then(() => {
+		pgPool.query(sql).then(result => {
 			var outputText = '{"type": "FeatureCollection", "features": [' +
 				result.rows.map(function(row) {
 					if (row.geojson) {
