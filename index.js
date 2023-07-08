@@ -68,14 +68,7 @@ module.exports = function(options) {
 			.replace(/{geojson}/g, geojsonSQL)
 			.replace(/{bbox}/g, bboxSQL);
 
-		pgPool.query(sql, function(err, result) {
-			if (err) {
-				console.log(sql, err.message, err.stack)
-				var err = new Error('An error occurred');
-				err.statusCode = 500;
-				return callback(err);
-			}
-
+		pgPool.query(sql).then(() => {
 			var outputText = '{"type": "FeatureCollection", "features": [' +
 				result.rows.map(function(row) {
 					if (row.geojson) {
@@ -85,8 +78,12 @@ module.exports = function(options) {
 					}
 				}).join(',') +
 			']}';
-
 			callback(null, outputText, {'Content-Type': 'application/json'});
+		}, (err) => {
+			console.log(sql, err.message, err.stack)
+			var err = new Error('An error occurred');
+			err.statusCode = 500;
+			return callback(err);
 		});
 	}
 

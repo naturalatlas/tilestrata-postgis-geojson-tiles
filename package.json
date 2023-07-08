@@ -15,8 +15,8 @@
   "author": "Brandon Reavis",
   "license": "Apache-2.0",
   "dependencies": {
-    "@mapbox/sphericalmercator": "^1.0.5",
-    "pg": "^6.4.0"
+    "@mapbox/sphericalmercator": "^1.2.0",
+    "pg": "^8.11.1"
   },
   "repository": {
     "type": "git",
