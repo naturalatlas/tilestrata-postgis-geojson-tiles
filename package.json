@@ -1,6 +1,6 @@
 {
   "name": "@naturalatlas/tilestrata-postgis-geojson-tiles",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tilestrata plugin for generating geojson tiles from postgis",
   "main": "index.js",
   "scripts": {
